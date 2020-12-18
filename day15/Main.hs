@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 module Main where
 
 import Text.Read (readMaybe)
@@ -7,14 +8,14 @@ import Data.Foldable (toList)
 import Data.Sequence (Seq, Seq((:<|), (:|>)))
 import qualified Data.Sequence as Seq
 import Data.IntMap (IntMap)
-import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntMap as IntMap
 
 type Position = Int
 type Turn = Int
 data State = State
-    { _positions :: !(IntMap Position)
-    , _turn :: !Turn
-    , _submission :: !Int }
+    { _positions :: IntMap Position
+    , _turn :: Turn
+    , _submission :: Int }
 
 initial :: Seq Int -> Maybe State
 initial Seq.Empty = Nothing
@@ -22,7 +23,7 @@ initial input@(ns :|> last) =
     Just $ State (IntMap.fromList (zip (toList ns) [1..])) (length input) last
 
 turn :: State -> State
-turn (State positions turn submission) =
+turn (State positions turn !submission) =
     State
     (IntMap.insert submission turn positions)
     (turn + 1)
