@@ -10,6 +10,8 @@ module Vector2D
     , indexes
     , update
     , borders
+    , width
+    , height
     )
     where
 
